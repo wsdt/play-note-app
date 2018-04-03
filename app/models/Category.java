@@ -1,30 +1,28 @@
 package models;
 
-import play.data.validation.Constraints;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.annotation.Nonnull;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Entity
 public class Category {
+
     @Id
-    @Constraints.Required(message = "Please add a title")
-    @Constraints.MaxLength(value = 20, message = "Only 20 characters are allowed")
-    protected String title = "";
+    protected int id;
+    protected String title;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    public List<Note> noteList = new ArrayList<>();
+    @OneToMany @JsonIgnore
+    protected List<Note> notes;
 
-    public Category() {}
-    public Category(@Nonnull String title) {
-        this.setTitle(title);
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -35,5 +33,11 @@ public class Category {
         this.title = title;
     }
 
-}
+    public List<Note> getNotes() {
+        return notes;
+    }
 
+    public void setNotes(List<Note> notes) {
+        this.notes = notes;
+    }
+}

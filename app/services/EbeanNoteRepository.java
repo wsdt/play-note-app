@@ -1,10 +1,9 @@
 package services;
 
 import io.ebean.Ebean;
-import models.Category;
 import models.Note;
 
-import java.util.Arrays;
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class EbeanNoteRepository {
@@ -21,12 +20,12 @@ public class EbeanNoteRepository {
     }
 
     public void saveNote(Note note) {
-        note.setLastEdited( (int) (System.currentTimeMillis() / 1000L) );
+        note.setLastEdited( (int) (System.currentTimeMillis() / 1000L));
 
-        if (note.getId() > 0) {
-            Ebean.update(note);
-        } else {
+        if (Ebean.find(Note.class,note.getId()) == null) {
             Ebean.save(note);
+        } else {
+            Ebean.update(note);
         }
     }
 
@@ -34,17 +33,4 @@ public class EbeanNoteRepository {
         Ebean.delete(Note.class, id);
     }
 
-    //CATEGORY --------------------------------------
-    public List<Category> getAllCategories() {
-        List<Category> categoryList = Ebean.find(Category.class).findList();
-        if (categoryList.size() <= 0) {
-            //add example categories
-            Ebean.saveAll(Arrays.asList(
-                    new Category("Holiday"),
-                    new Category("Surfing"),
-                    new Category("Fun")));
-            categoryList = Ebean.find(Category.class).findList(); //do it again
-        }
-        return categoryList;
-    }
 }

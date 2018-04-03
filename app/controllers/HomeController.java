@@ -4,6 +4,7 @@ import models.Note;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.*;
+import services.EbeanCategoryRepository;
 import services.EbeanNoteRepository;
 
 import javax.inject.Inject;
@@ -13,6 +14,8 @@ public class HomeController extends Controller {
 
     @Inject
     protected EbeanNoteRepository noteRepository;
+    @Inject
+    protected EbeanCategoryRepository categoryRepository;
 
     protected Form<Note> noteForm;
 
@@ -34,14 +37,14 @@ public class HomeController extends Controller {
             note = noteRepository.getNote(id);
         }
 
-        return ok(views.html.form.render(noteForm.fill(note),noteRepository.getAllCategories()));
+        return ok(views.html.form.render(noteForm.fill(note),categoryRepository.getCategories("asc")));
     }
 
     public Result save() {
         Form<Note> form = noteForm.bindFromRequest();
 
         if(form.hasErrors()){
-            return badRequest(views.html.form.render(form,noteRepository.getAllCategories()));
+            return badRequest(views.html.form.render(form,categoryRepository.getCategories("asc")));
         }else{
             noteRepository.saveNote(form.get());
             flash("success_save","This note was successfully saved.");

@@ -4,27 +4,28 @@
 # --- !Ups
 
 create table category (
-  title                         varchar(255) not null,
-  constraint pk_category primary key (title)
+  id                            integer auto_increment not null,
+  title                         varchar(255),
+  constraint pk_category primary key (id)
 );
 
 create table note (
   id                            integer auto_increment not null,
-  category_title                varchar(255),
   title                         varchar(255),
   description                   varchar(255),
   last_edited                   integer not null,
+  category_id                   integer,
   constraint pk_note primary key (id)
 );
 
-alter table note add constraint fk_note_category_title foreign key (category_title) references category (title) on delete restrict on update restrict;
-create index ix_note_category_title on note (category_title);
+alter table note add constraint fk_note_category_id foreign key (category_id) references category (id) on delete restrict on update restrict;
+create index ix_note_category_id on note (category_id);
 
 
 # --- !Downs
 
-alter table note drop constraint if exists fk_note_category_title;
-drop index if exists ix_note_category_title;
+alter table note drop constraint if exists fk_note_category_id;
+drop index if exists ix_note_category_id;
 
 drop table if exists category;
 

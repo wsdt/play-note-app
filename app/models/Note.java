@@ -1,7 +1,5 @@
 package models;
 
-
-
 import play.data.validation.Constraints;
 
 import javax.persistence.Entity;
@@ -13,22 +11,20 @@ import java.util.Date;
 @Entity
 public class Note {
 
-    @ManyToOne
-    private Category category;
-
     @Id
     protected int id = 0;
 
-    @Constraints.Required(message="Please add a title")
-    @Constraints.MaxLength(value=20, message="Only 20 characters are allowed")
+    @Constraints.Required(message = "Please add a title")
+    @Constraints.MaxLength(value = 20, message ="Only 20 characters are allowed")
     protected String title = "";
 
-    @Constraints.Required(message="Please add a description")
-    @Constraints.MaxLength(value=200, message="Only 200 characters are allowed")
+    @Constraints.Required(message = "Please add a description")
+    @Constraints.MaxLength(value = 200, message ="Only 200 characters are allowed")
     protected String description = "";
+    protected int lastEdited;
 
-
-    protected int lastEdited = 0;
+    @ManyToOne
+    protected Category category;
 
     public int getId() {
         return id;
@@ -73,4 +69,5 @@ public class Note {
     public void setCategory(Category category) {
         this.category = category;
     }
+
 }

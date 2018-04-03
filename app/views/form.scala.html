@@ -1,4 +1,4 @@
-@(form:Form[Note], categories: List[Category])
+@(form:Form[Note], categories:List[Category])
 
 @main("Note form") {
 
@@ -17,41 +17,36 @@
 
         <div class="form-group">
             <label for="form-title">Title</label>
-            <input name="title" value="@form("title").getValue().get()" type="text" class="form-control @if(form.getError("title").isPresent()){ is-invalid}" id="form-title">
+            <input name="title" value="@form("title").getValue().get()" type="text" class="form-control @if(form.getError("title").isPresent()){ is-invalid }" id="form-title">
 
             @for(currentError <- form.errors("title")) {
                 <div class="invalid-feedback">
                     @currentError.message()
                 </div>
             }
-
         </div>
 
         <div class="form-group">
             <label for="form-note">Note</label>
-            <textarea name="description" id="form-note" class="form-control @if(form.getError("description").isPresent()){ is-invalid}">@form("description").getValue().get()</textarea>
+            <textarea name="description" id="form-note" class="form-control @if(form.getError("description").isPresent()){ is-invalid }">@form("description").getValue().get()</textarea>
 
             @for(currentError <- form.errors("description")) {
                 <div class="invalid-feedback">
                 @currentError.message()
                 </div>
             }
-
         </div>
 
         <div class="form-group">
             <label for="form-category">Category</label>
-            <select name="category.title" id="form-category" class="form-control">
-                @for(category <- categories) {
-                    @if(form("category.title").getValue().get().equals(category.getTitle())) {
-                        <option selected id="@category.getTitle()" value="@category.getTitle()">@category.getTitle()</option>
-                    } else {
-                        <option id="@category.getTitle()" value="@category.getTitle()">@category.getTitle()</option>
-                    }
-                }
-            </select>
 
+            <select id="form-category" class="form-control" name="category.id">
+            @for(category <- categories) {
+                <option @if(form("category").getValue().isPresent() && form("category").getValue().get().equals("models.Category@" + category.getId())) { selected } value="@category.getId()">@category.getTitle()</option>
+            }
+            </select>
         </div>
+
 
         @helper.CSRF.formField
 
