@@ -74,9 +74,13 @@ public class CategoryController extends Controller {
 
     public Result list() {
         String order = request().getQueryString("sort");
-        if (order == null || (!order.equals("asc") && !order.equals("desc"))) {
+        if (order == null) {
             order = "asc"; //by default
-        }
+        } else {
+			if (!order.equals("asc") && !order.equals("desc")) {
+				order = "asc";
+			} 
+		}
 
         List<Category> allCategories = categoryRepository.getCategories(order);
         String like = request().getQueryString("query");

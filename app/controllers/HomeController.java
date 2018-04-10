@@ -1,5 +1,6 @@
 package controllers;
 
+import middlewares.BasicAuthenticationMiddleware;
 import models.Note;
 import play.data.Form;
 import play.data.FormFactory;
@@ -10,6 +11,7 @@ import services.EbeanNoteRepository;
 import javax.inject.Inject;
 import java.util.List;
 
+@With(BasicAuthenticationMiddleware.class)
 public class HomeController extends Controller {
 
     @Inject
