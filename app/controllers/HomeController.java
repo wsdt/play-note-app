@@ -1,23 +1,30 @@
 package controllers;
 
 import middlewares.BasicAuthenticationMiddleware;
+import middlewares.SessionAuthenticationMiddleware;
 import models.Note;
+import models.User;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.*;
 import services.EbeanCategoryRepository;
 import services.EbeanNoteRepository;
+import services.EbeanUserRepository;
 
 import javax.inject.Inject;
 import java.util.List;
 
-@With(BasicAuthenticationMiddleware.class)
+@With(SessionAuthenticationMiddleware.class)
 public class HomeController extends Controller {
 
+    @Inject
+    protected SessionAuthenticationMiddleware sessionAuthenticationMiddleware;
     @Inject
     protected EbeanNoteRepository noteRepository;
     @Inject
     protected EbeanCategoryRepository categoryRepository;
+    @Inject
+    protected EbeanUserRepository userRepository;
 
     protected Form<Note> noteForm;
 
@@ -48,15 +55,21 @@ public class HomeController extends Controller {
         if(form.hasErrors()){
             return badRequest(views.html.form.render(form,categoryRepository.getCategories("asc")));
         }else{
+            Note tmpNote = form.get();
+            tmpNote.setUser(userRepository.getUserByUsername(Http.Context.current().session().get("username")));
             noteRepository.saveNote(form.get());
-            flash("success_save","This note was successfully saved.");
+            flash("success","This note was successfully saved.");
             return redirect("/");
         }
     }
 
     public Result delete(int id) {
-        noteRepository.deleteNote(id);
-        return ok();
+        if (sessionAuthenticationMiddleware.getUserFromCurrSess().getUsername().equals(noteRepository.getNote(id).getUser().getUsername())) {
+            noteRepository.deleteNote(id);
+            return ok();
+        } else {
+            return forbidden("Admin has no permission to delete notes of other users.");
+        }
     }
 
 }

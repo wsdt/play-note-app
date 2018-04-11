@@ -1,0 +1,31 @@
+@main("Note form") {
+
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="/">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Note</li>
+        </ol>
+    </nav>
+
+    <form method="post" action="/auth">
+
+        <div class="form-group">
+            <label for="form-username">Username</label>
+            <input name="username" placeholder="Blub blub" value="zwerg1" type="text" class="form-control" id="form-username">
+        </div>
+
+        <div class="form-group">
+            <label for="form-password">Password</label>
+            <input name="password" placeholder="Blub blub" value="festung" type="password" class="form-control" id="form-password">
+        </div>
+
+
+        @helper.CSRF.formField
+
+        <button type="submit" class="btn btn-primary">Login</button>
+
+    </form>
+
+}

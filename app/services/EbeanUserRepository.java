@@ -2,6 +2,12 @@ package services;
 
 import io.ebean.Ebean;
 import models.User;
+import play.mvc.Result;
+
+import javax.annotation.Nonnull;
+
+import static play.mvc.Controller.flash;
+import static play.mvc.Results.redirect;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,6 +26,7 @@ public class EbeanUserRepository {
 
             User user2 = new User();
             user2.setUsername("zwerg2");
+            user2.setAdmin(true);
             user2.setPasswordInCleartext("festung");
             Ebean.save(user2);
         }
@@ -29,5 +36,9 @@ public class EbeanUserRepository {
         return Ebean.find(User.class)
                 .where().eq("username",username)
                 .findOne();
+    }
+
+    public void save(@Nonnull User user) {
+        Ebean.save(user);
     }
 }

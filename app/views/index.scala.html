@@ -33,7 +33,7 @@
                     <td>@note.getId()</td>
                     <td>@note.getTitle()</td>
                     <td>@note.getCategory().getTitle()</td>
-                    <td>@note.getLastEditedFormatted()</td>
+                    <td>@note.getLastEditedFormatted() by @note.getUser.getUsername</td>
                     <td>
                         <a class="btn btn-primary" href="/notes/@note.getId()">Edit</a>
                         <button data-action="delete" data-id="@note.getId()" class="btn btn-danger">Delete</button>

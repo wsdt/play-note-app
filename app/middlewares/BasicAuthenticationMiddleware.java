@@ -26,7 +26,7 @@ public class BasicAuthenticationMiddleware extends Action.Simple {
 
         if (header.isPresent() && header.get().startsWith("Basic ")) {
             String[] auth = new String(Base64.getDecoder().decode(header.get().substring(6))).split(":"); //byte[] zu Str
-            if (auth.length == 2) { 
+            if (auth.length == 2) {
                 User user = userRepository.getUserByUsername(auth[0]);
 
                 if (user != null && user.comparePasswords(auth[1])) { //with & nullpointer would occur, with && it will abort before next validation :)

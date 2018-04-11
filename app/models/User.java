@@ -1,11 +1,10 @@
 package models;
 
 import javax.annotation.Nonnull;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -22,6 +21,10 @@ public class User {
     @Column(unique=true)
     private String username;
     private String password;
+    private boolean isAdmin = false; //by default false
+
+    @OneToMany
+    protected List<Note> noteList;
 
     public static String getHash(@Nonnull String input) {
         try {
@@ -62,5 +65,25 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public List<Note> getNoteList() {
+        return noteList;
+    }
+
+    public void setNoteList(List<Note> noteList) {
+        this.noteList = noteList;
+    }
+
+    public boolean isAdmin() {
+        return isAdmin;
+    }
+
+    public void setAdmin(boolean admin) {
+        isAdmin = admin;
+    }
+
+    public UserChangePwdForm getUserChangePwdForm() {
+        return new UserChangePwdForm();
     }
 }

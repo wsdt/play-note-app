@@ -1,15 +1,28 @@
 package services;
 
 import io.ebean.Ebean;
+import middlewares.SessionAuthenticationMiddleware;
 import models.Note;
+import models.User;
+import play.mvc.Http;
 
 import javax.annotation.Nonnull;
+import javax.inject.Inject;
 import java.util.List;
 
 public class EbeanNoteRepository {
+    @Inject
+    protected SessionAuthenticationMiddleware sessionAuthenticationMiddleware;
 
     public List<Note> getNotes() {
-        return Ebean.find(Note.class).findList();
+        User currUser = sessionAuthenticationMiddleware.getUserFromCurrSess();
+
+        if (currUser.isAdmin()) {
+            return Ebean.find(Note.class).findList(); //show all
+        } else {
+            return Ebean.find(Note.class).where().
+                    eq("user", currUser).findList(); //just return only user related
+        }
     }
 
     public Note getNote(int id) {

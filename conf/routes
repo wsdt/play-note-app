@@ -4,6 +4,12 @@
 
 
 # An example controller showing a sample home page
+GET     /auth                       controllers.AuthController.sessAuth
+POST    /auth                       controllers.AuthController.dbAuth
+GET     /logout                     controllers.AuthController.logout
+GET     /changepwd                  controllers.AuthController.showChangePwdForm
+POST    /changepwd                  controllers.AuthController.changePwd
+
 GET     /                           controllers.HomeController.index
 GET     /api/v1/notes               controllers.NoteController.list
 GET     /api/v1/notes/:id           controllers.NoteController.get(id:Integer)
